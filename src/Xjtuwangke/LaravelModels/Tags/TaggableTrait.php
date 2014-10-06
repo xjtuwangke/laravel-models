@@ -39,7 +39,7 @@ trait TaggableTrait {
             $types = static::$tagTypes;
         }
         foreach( $types as $type => $lable ){
-            $form->addField( FormFieldBase::createByType( 'tags_' . $type , FormFieldBase::Type_Tags )
+            $form->addField( \FormFieldBase::createByType( 'tags_' . $type , \FormFieldBase::Type_Tags )
                     ->setLabel( $lable )->setDefault( [] )
             );
             if( null != $item && 0 !== $id ){

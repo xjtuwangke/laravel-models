@@ -2,6 +2,8 @@
 
 namespace Xjtuwangke\LaravelModels\Tags;
 
+use Xjtuwangke\LaravelModels\BasicModel;
+
 class TagModel extends BasicModel {
 
     /**

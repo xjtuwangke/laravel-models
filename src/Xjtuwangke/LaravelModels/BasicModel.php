@@ -11,6 +11,8 @@ namespace Xjtuwangke\LaravelModels;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Xjtuwangke\LaravelModels\Observer\HistoryResourceTrait;
 
+use Xjtuwangke\LaravelModels\Observer\ModelObserver;
+
 class BasicModel extends \Eloquent {
 
     use SoftDeletingTrait , HistoryResourceTrait;
@@ -24,7 +26,7 @@ class BasicModel extends \Eloquent {
     public static function boot(){
         parent::boot();
         if( true == static::$withModelObserver ){
-            static::observe( new \ModelObserver );
+            static::observe( new ModelObserver );
         }
 
         $class = get_called_class();

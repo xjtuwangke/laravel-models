@@ -49,7 +49,7 @@ trait MultiStatusTrait {
             $this->$column = date('Y-m-d H:i:s');
         }
         $this->save();
-        Event::fire( get_class() . '.status.changed' , array( $this , $old , $new ) );
+        \Event::fire( get_class() . '.status.changed' , array( $this , $old , $new ) );
         return $this;
     }
 

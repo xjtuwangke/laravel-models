@@ -8,6 +8,9 @@
 
 namespace Xjtuwangke\LaravelModels\Rbac;
 
+use Xjtuwangke\LaravelModels\BasicModel;
+use Xjtuwangke\LaravelModels\Traits\SwitchableTrait;
+
 class RoleModel extends BasicModel{
 
     use SwitchableTrait;
