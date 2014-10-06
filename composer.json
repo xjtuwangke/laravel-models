@@ -1,0 +1,24 @@
+{
+    "name": "xjtuwangke/laravel-models",
+    "description": "",
+    "authors": [
+        {
+            "name": "xjtuwangke",
+            "email": "wangke85@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+        , "zendframework/zend-permissions-rbac": "2.3.*@dev"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Xjtuwangke\\LaravelModels\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
