@@ -11,26 +11,18 @@ namespace Xjtuwangke\LaravelModels\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Illuminate\Support\Facades\Schema;
+
 class BasicMigration extends Migration{
 
     protected $tables = array(
-        //'users' => 'UserModel'
+        //'UserModel' , 'ProfileModel'
     );
 
-    protected $model = null;
-
     public function up(){
-        foreach( $this->tables as $tablename => $model ){
-            $this->model = $model;
-            Schema::create( $tablename , function( Blueprint $table ){
-                $table->engine = 'InnoDB';
-                $table->increments( 'id' );
-                $method = 'schema_' . $table;
-                $table = $this->$method( $table );
-                $this->tables;
-                $table = $this->schema( $table , $this->model );
-                $table->softDeletes();
-                $table->timestamps();
+        foreach( $this->tables as $model ){
+            Schema::create( $model::getTableName() , function( Blueprint $table ) use( $model ){
+                $model::_schema( $table );
             });
         }
     }
@@ -38,20 +30,9 @@ class BasicMigration extends Migration{
     public function down(){
         $tables = $this->tables;
         $tables = array_reverse( $tables );
-        foreach( $tables as $table => $model ){
-            Schema::dropIfExists( $table );
+        foreach( $tables as $model ){
+            Schema::dropIfExists( $model::getTableName() );
         }
-
-    }
-
-    protected function schema_( $table ){
-
-    }
-
-    protected function schema( $table , $model ){
-        $model = new $model();
-
-        return $table;
     }
 
 }

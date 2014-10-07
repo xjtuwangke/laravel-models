@@ -10,7 +10,6 @@ namespace Xjtuwangke\LaravelModels\Comments;
 
 use Xjtuwangke\LaravelModels\BasicModel;
 use Xjtuwangke\LaravelModels\Traits\MultiStatusTrait;
-use Xjtuwangke\LaravelModels\Users\UserModel;
 
 class CommentModel extends BasicModel{
 
@@ -28,7 +27,7 @@ class CommentModel extends BasicModel{
         return $this->morphTo();
     }
 
-    public static function createByUser( UserModel $user , BasicModel $commentable , array $comment ){
+    public static function createByUser( BasicModel $user , BasicModel $commentable , array $comment ){
         $comment['user_id'] = $user->id;
         $comment['commentable_type'] = $commentable->getMorphClass();
         $comment['commentable_id']   = $commentable->id;

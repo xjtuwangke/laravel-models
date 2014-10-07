@@ -14,9 +14,13 @@ class TagModel extends BasicModel {
     protected $table = 'tags';
 
     public static function _schema_tagModel( \Illuminate\Database\Schema\Blueprint $table ){
+        $table->engine = 'InnoDB';
+        $table->increments( 'id' );
         $table->text( 'name' )->nullable();
         $table->string( 'type' )->default( 'default' );
         $table->morphs( 'taggable' );
+        $table->softDeletes();
+        $table->timestamps();
         return $table;
     }
 

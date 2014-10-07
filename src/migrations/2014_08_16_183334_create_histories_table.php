@@ -15,10 +15,10 @@ class CreateHistoriesTable extends Migration {
 		//
         //创建histories表
         Schema::create( 'histories' , function( Blueprint $table ){
-            $table->engine = 'InnoDB';
+            $table->engine = 'ARCHIVE';
             $table->increments( 'id' );
-            $table->string( 'operator_type' , 100 );
-            $table->string( 'operator_id' , 100 );
+            $table->string( 'operator_type' , 100 )->nullable();
+            $table->string( 'operator_id' , 100 )->nullable();
             $table->morphs( 'resource' );
             $table->longText( 'table' );
             $table->text( 'action' );

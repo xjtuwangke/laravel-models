@@ -31,31 +31,31 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
 
     //protected $fillable = array('username' , 'mobile' , 'email');
 
-    protected $morphClass = 'UserModel';
+    static public function _schema_usermodel( \Illuminate\Database\Schema\Blueprint $table ){
+        $table->engine = 'InnoDB';
+        $table->increments( 'id' );
+        $table->string( 'username' , 100 );
+        $table->string( 'nickname' , 30)->unique();
+        $table->string( 'email' , 100 );
+        $table->string( 'mobile' , 20 );
+        $table->integer( 'exp' )->default( 0 );
+        $table->integer( 'points' )->default( 0 );
+        $table->date( 'birthdate' )->nullable();
+        $table->enum( 'gender' , [ '男' , '女' , '保密' ] )->default( '保密' );
+        $table->string( 'password' , 100 );
+        $table->string( 'remember_token' , 100 );
+        $table->timestamp( 'last_login' );
+        $table->softDeletes();
+        $table->timestamps();
+        return $table;
+    }
 
     public function scopeOfGroup( $query , $group ){
         return $query->where( 'user.group' , $group );
-        //User::ofGroup('admin')->get()
     }
 
     public function profile(){
         return $this->hasOne('ProfileModel' , 'user_id' , 'id'); //foreign key, local key
-    }
-
-    public function addresses(){
-        return $this->hasMany( 'AddressModel' , 'user_id' , 'id' )->orderBy( 'updated_at' , 'desc' )->take( 5 );
-    }
-
-    public function orders(){
-        return $this->hasMany('OrderModel' , 'user_id' , 'id')->orderBy( 'created_at' , 'desc' );
-    }
-
-    public function avatar(){
-        return $this->morphOne( 'ImageModel' , 'imageable' );
-    }
-
-    public function roles(){
-        return $this->belongsToMany('Role' , 'user_roles' , 'user_id' , 'role_id');
     }
 
     static function generateNickname(){

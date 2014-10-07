@@ -16,11 +16,7 @@ class CreateTagsTable extends Migration {
 	{
 		//
         Schema::create( 'tags' , function( Blueprint $table ){
-            $table->engine = 'InnoDB';
-            $table->increments( 'id' );
             TagModel::_schema( $table );
-            $table->softDeletes();
-            $table->timestamps();
         });
 
 	}
