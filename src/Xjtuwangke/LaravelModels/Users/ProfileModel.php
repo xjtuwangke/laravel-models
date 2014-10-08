@@ -20,7 +20,7 @@ class ProfileModel extends BasicModel {
     }
 
     public function user(){
-        return $this->belongsTo('User' , 'user_id' , 'id');
+        return $this->belongsTo('UserModel' , 'user_id' , 'id');
     }
 
 }

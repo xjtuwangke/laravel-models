@@ -16,7 +16,7 @@ trait UserRoleTrait {
     }
 
     public function role(){
-        return $this->hasOne( 'RoleModel' , 'id' , 'role_id' );
+        return $this->hasOne( 'Xjtuwangke\LaravelModels\Rbac\RoleModel' , 'id' , 'role_id' );
     }
 
     static public function createWithRole( $data , RoleModel $role ){

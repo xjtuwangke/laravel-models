@@ -27,7 +27,7 @@ class RoleModel extends BasicModel{
     }
 
     public function parentRole(){
-        return $this->hasOne( 'RoleModel' , 'parent_id' , 'id' );
+        return $this->hasOne( 'Xjtuwangke\LaravelModels\Rbac\RoleModel' , 'parent_id' , 'id' );
     }
 
     public function isRoot(){
