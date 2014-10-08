@@ -32,7 +32,7 @@ class ImageModel extends BasicModel {
      * @return static
      */
     public static function createUploadedImage( $file , $url ){
-        $fullpath = upload_path( $file );
+        $fullpath = public_path( $file );
         $size = filesize( $fullpath );
         list( $width , $height ) = getimagesize( $fullpath );
         $explode = explode( '.' , $file );
