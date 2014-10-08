@@ -48,7 +48,7 @@ trait ImageableTrait {
         $form->addField( FormFieldBase::createByType( 'image' , FormFieldBase::Type_Image )
             ->setLabel( $label )
             ->setType('default')
-            ->setDefault( KUrl::noimage() )
+            ->setDefault( '' )
             ->setWidth( $width )
             ->setHeight( $height )
         );
