@@ -8,6 +8,8 @@
 
 namespace Xjtuwangke\LaravelModels\Observer;
 
+use Xjtuwangke\LaravelModels\AuthModel;
+
 class ModelObserver {
 
     static protected $operator = null;
