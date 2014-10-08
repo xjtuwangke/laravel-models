@@ -23,7 +23,7 @@ class AuthModel extends \Auth {
     }
 
     static public function getUser(){
-        if( Session::get( 'auth_field' ) !==  Config::get( 'auth.model') ){
+        if( is_null( Session::get( 'auth_field' ) ) || Session::get( 'auth_field' ) !==  Config::get( 'auth.model') ){
             return null;
         }
         else{
