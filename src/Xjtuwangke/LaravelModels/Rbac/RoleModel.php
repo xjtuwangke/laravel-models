@@ -18,15 +18,11 @@ class RoleModel extends BasicModel{
     protected $table = 'roles';
 
     static public function _schema_roles( \Illuminate\Database\Schema\Blueprint $table ){
-        $table->engine = 'InnoDB';
-        $table->increments( 'id' );
         $table->integer( 'parent_id' );
         $table->string( 'name' )->unique();
         $table->longText( 'permissions' );
         $table->string( 'title' );
         $table->text( 'desc' )->nullable();
-        $table->softDeletes();
-        $table->timestamps();
         return $table;
     }
 

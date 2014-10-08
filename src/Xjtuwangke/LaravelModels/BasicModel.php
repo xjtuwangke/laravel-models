@@ -44,12 +44,16 @@ class BasicModel extends \Eloquent {
         $class = get_called_class();
         $ref = new \ReflectionClass( $class );
         $methods = $ref->getMethods( \ReflectionMethod::IS_STATIC );
+        $table->engine = 'InnoDB';
+        $table->increments( 'id' );
         foreach( $methods as $method ){
             if( preg_match( '/^_schema_.*/' , $method->name ) ){
                 $name = $method->name;
                 $table = static::$name( $table );
             }
         }
+        $table->softDeletes();
+        $table->timestamps();
         return $table;
     }
 

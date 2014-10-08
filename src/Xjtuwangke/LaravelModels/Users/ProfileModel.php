@@ -14,12 +14,8 @@ class ProfileModel extends BasicModel {
     protected $table = 'user_profile';
 
     static public function _schema_profilemodel( \Illuminate\Database\Schema\Blueprint $table ){
-        $table->engine = 'InnoDB';
-        $table->increments( 'id' );
         $table->integer( 'user_id' )->unsigned();
         $table->text( 'avatar' );
-        $table->softDeletes();
-        $table->timestamps();
         return $table;
     }
 

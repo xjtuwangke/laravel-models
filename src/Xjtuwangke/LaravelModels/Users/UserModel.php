@@ -32,8 +32,6 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
     //protected $fillable = array('username' , 'mobile' , 'email');
 
     static public function _schema_usermodel( \Illuminate\Database\Schema\Blueprint $table ){
-        $table->engine = 'InnoDB';
-        $table->increments( 'id' );
         $table->string( 'username' , 100 );
         $table->string( 'nickname' , 30)->unique();
         $table->string( 'email' , 100 );
@@ -45,8 +43,6 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
         $table->string( 'password' , 100 );
         $table->string( 'remember_token' , 100 );
         $table->timestamp( 'last_login' );
-        $table->softDeletes();
-        $table->timestamps();
         return $table;
     }
 
