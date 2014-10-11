@@ -34,4 +34,13 @@ class CommentModel extends BasicModel{
         return static::create( $comment );
     }
 
+    public function topicRoot(){
+        $comentable = $this->comentable;
+        $root = $this;
+        while( $comentable ){
+            $root = $comentable;
+        }
+        return $root;
+    }
+
 } 
