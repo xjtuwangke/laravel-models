@@ -24,11 +24,11 @@ trait TaggableTrait {
     }
 
     public function tags( $type = 'default' ){
-        return $this->morphMany( 'TagModel' , 'taggable' )->ofType( $type );
+        return $this->morphMany( 'Xjtuwangke\LaravelModels\Tags\TagModel' , 'taggable' )->ofType( $type );
     }
 
     public function getTagsByType( $type = 'default' ){
-        return $this->morphMany( 'TagModel' , 'taggable' )->ofType( $type )->get();
+        return $this->morphMany( 'Xjtuwangke\LaravelModels\Tags\TagModel' , 'taggable' )->ofType( $type )->get();
     }
 
     public static function bindFormActionTags( $form , $item = null , $id = 0 ){
@@ -121,7 +121,7 @@ trait TaggableTrait {
     }
 
     public static function withTag( $tagName , $type = 'default' , $query = null ){
-        $class = get_class();
+        $class = get_called_class();
         $class = new $class;
         $class = $class->getMorphClass();
         $tags = TagModel::where( 'taggable_type' , '=' , $class )->where( 'name' , '=' , $tagName );
@@ -156,6 +156,10 @@ trait TaggableTrait {
             $query = static::withTag( $name , $type , $query );
         }
         return $query;
+    }
+
+    public function setTags( array $tags , $type = 'default' ){
+        return TagModel::setTags( $this , $tags , $type );
     }
 
 } 
