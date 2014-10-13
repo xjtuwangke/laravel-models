@@ -10,6 +10,7 @@ namespace Xjtuwangke\LaravelModels\Favorites;
 
 
 use Illuminate\Database\Schema\Blueprint;
+use Xjtuwangke\LaravelModels\BasicModel;
 use Xjtuwangke\LaravelModels\Relationships\MtoNRelationShip;
 
 class FavoriteModel extends MtoNRelationShip{

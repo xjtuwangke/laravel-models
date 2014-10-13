@@ -62,4 +62,8 @@ class BasicModel extends \Eloquent {
         return $model->getTable();
     }
 
+    public function getAttributeWithParents( $attribute ){
+        return $this->$attribute;
+    }
+
 } 

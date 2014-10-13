@@ -25,6 +25,18 @@ trait FavoriteTrait {
         });
     }
 
+    public function isFavoritedByUser( $user ){
+        if( ! $user ){
+            return false;
+        }
+        if( FavoriteModel::hasRelationShip( $user , $this ) ){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function addFavorite( BasicModel $user ){
         if( FavoriteModel::hasRelationShip( $user , $this ) ){
             return $this;
