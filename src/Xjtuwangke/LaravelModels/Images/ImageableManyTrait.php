@@ -32,7 +32,7 @@ trait ImageableManyTrait {
     }
 
     public function images(){
-        return $this->morphMany( 'ImageModel' , 'imageable' )->where( 'image_order' , '!=' , '0' )->orderBy( 'image_order' , 'asc' );
+        return $this->morphMany( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '!=' , '0' )->orderBy( 'image_order' , 'asc' );
         // related name type('imagable_type') id('imagable_id') localKey ('id')
         // select * from `images` where `images`.`deleted_at` is null and `images`.`imagable_id` = 1 and `images`.`imagable_type` = 'GoodsModel'
         // 返回一个relation而非collection

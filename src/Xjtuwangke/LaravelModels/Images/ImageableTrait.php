@@ -27,7 +27,7 @@ trait ImageableTrait {
     }
 
     public function image(){
-        return $this->morphOne( 'ImageModel' , 'imageable' )->where( 'image_order' , '0' );
+        return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' );
     }
 
     public static function bindFormActionImageUpload( $form , $item = null , $id = 0){
