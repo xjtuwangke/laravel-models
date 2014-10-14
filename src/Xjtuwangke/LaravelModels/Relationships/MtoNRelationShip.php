@@ -64,7 +64,7 @@ class MtoNRelationShip extends BasicModel{
             static::$nameN . '_type' => $item_n->getMorphClass() ,
             static::$nameN . '_id'   => $item_n->getKey() ,
         );
-        return static::first( $attributes );
+        return static::where( $attributes )->first();
     }
 
     public static function getM( BasicModel $item_n ){
