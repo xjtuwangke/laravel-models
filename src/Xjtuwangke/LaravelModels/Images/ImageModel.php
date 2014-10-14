@@ -27,8 +27,8 @@ class ImageModel extends BasicModel {
      * 图片上传的流程:
      * 1. UploadController负责move,resize,生成URL,调用 ImageModel::createUploadedImage,将图片存入数据库
      * 2. 表单提交后 调用 ImageModel::linkUploadedImage 建立关联
-     * @param $file 图片相对于 public/upload/ 的相对路径 + 文件名
-     * @param $url  图片的url地址,可能是CDN
+     * @param $file string 图片相对于 public/upload/ 的相对路径 + 文件名
+     * @param $url  string 图片的url地址,可能是CDN
      * @return static
      */
     public static function createUploadedImage( $file , $url ){

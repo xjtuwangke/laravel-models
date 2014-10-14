@@ -25,11 +25,21 @@ class CommentModel extends BasicModel{
         $table = parent::_schema( $table );
         $table->integer( 'user_id' );
         $table->morphs( 'commentable' );
+        $table->morphs( 'comment_root' );
         $table->longText( 'comment' )->nullable();
     }
 
     public function user(){
-        return $this->hasOne( 'Xjtuwangke\LaravelModels\Users\UserModel' , 'id' , 'user_id' );
+        if( class_exists( '\UserModel' ) ){
+            return $this->hasOne( '\UserModel' , 'id' , 'user_id' );
+        }
+        else{
+            return $this->hasOne( 'Xjtuwangke\LaravelModels\Users\UserModel' , 'id' , 'user_id' );
+        }
+    }
+
+    public function comment_root(){
+        return $this->morphTo();
     }
 
     public function commentable(){
@@ -38,24 +48,32 @@ class CommentModel extends BasicModel{
 
     public static function createByUser( BasicModel $user , $commentable , array $comment ){
         $comment['user_id'] = $user->id;
+        $comment['comment_root_id'] = 0;
+        $comment['comment_root_type'] = get_called_class();
         if( $commentable ){
             $comment['commentable_type'] = $commentable->getMorphClass();
-            $comment['commentable_id']   = $commentable->id;
+            $comment['commentable_id']   = $commentable->getKey();
+            $comment = static::create( $comment );
+            if( $commentable->comment_root ){
+                //commentable有comment_root时继承comment_root
+                $root = $commentable->comment_root;
+            }
+            else{
+                //否则root是commentable
+                $root = $commentable;
+            }
         }
         else{
             $comment['commentable_type'] = get_called_class();
             $comment['commentable_id']   = 0;
+            $comment = static::create( $comment );
+            $root = $comment;
         }
-        return static::create( $comment );
-    }
+        $comment->comment_root_id = $root->getKey();
+        $comment->comment_root_type = $root->getMorphClass();
+        $comment->save();
+        return $comment;
 
-    public function topicRoot(){
-        $comentable = $this->comentable;
-        $root = $this;
-        while( $comentable ){
-            $root = $comentable;
-        }
-        return $root;
     }
 
     public static function lastActiveUsers( $take , $since = '1970-01-01 00:00:00' ){
@@ -74,6 +92,22 @@ class CommentModel extends BasicModel{
             ->where( 'user_id' , $user->getKey() )
             ->where( 'created_at' , '>=' , $since )
             ->count();
+    }
+
+    public static function queryRespondedToUserComments( BasicModel $user , $query = null ){
+        $idArray = array();
+        $comments = static::where( array(
+            'user_id' => $user->getKey() ,
+        ))->select( [ 'id' ] )->get();
+        foreach( $comments as $comment ){
+            $idArray[] = $comment->id;
+        }
+        if( $query ){
+            return $query->whereIn( 'commentable_id' , $idArray )->where( 'commentable_type' , get_called_class() );
+        }
+        else{
+            return static::whereIn( 'commentable_id' , $idArray )->where( 'commentable_type' , get_called_class() );
+        }
     }
 
 } 
