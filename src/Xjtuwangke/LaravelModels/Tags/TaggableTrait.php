@@ -57,37 +57,37 @@ trait TaggableTrait {
         return $form;
     }
 
-    public function relatevedItemsByTag( $min = 3 , $max = 10 , $type = 'default' , $class = null ){
+    public function relatevedItemsIdArrayByTag( $type = 'default' , $class = null ){
         $tags = $this->getTagsByType( $type );
-        $this_id = $this->{$this->primaryKey};
         $tagNames = [];
         foreach( $tags as $tag ){
             $tagNames[] = $tag->name;
         }
         if( is_null( $class ) ){
-            $class = $this->getMorphClass();
+            $class = get_called_class();
         }
-
+        $idArray = [];
         if( ! empty( $tagNames ) ){
             $id_collection = TagModel::select( 'taggable_id' )
-                ->where( 'taggable_type' , $class )->where( 'type' , $type )->where( 'taggable_id' , '!=' , $this_id )
+                ->where( 'taggable_type' , $class )->where( 'type' , $type )->where( 'taggable_id' , '!=' , $this->getKey() )
                 ->whereIn( 'name' , $tagNames )->get();
-            $idArray = [];
             foreach( $id_collection as $one ){
                 $idArray[] = $one->taggable_id;
             }
-            if( empty( $idArray ) ){
-                $idArray = [ -1 ];
-            }
-            $items = $class::whereIn( $this->primaryKey ,  [ -1 ] )->take( $max )->get();
         }
-        else{
+        return $idArray;
+    }
+
+    public function relatevedItemsByTag( $min = 3 , $max = 10 , $type = 'default' , $class = null ){
+        $idArray = $this->relatevedItemsByTag( $type , $class );
+        if( empty( $idArray ) ){
             $idArray = [ -1 ];
-            $items = $class::whereIn( $this->primaryKey , $idArray )->take( $max )->get();
         }
+        $items = $class::whereIn( $this->primaryKey ,  $idArray )->take( $max )->get();
+
         $more = $min - $items->count();
         if( $more > 0 ){
-            $more = $class::whereNotIn( $this->primaryKey , $idArray )->where( $this->primaryKey , '!=' , $this_id )->take( $more )->get();
+            $more = $class::whereNotIn( $this->primaryKey , $idArray )->where( $this->primaryKey , '!=' , $this->getKey() )->take( $more )->get();
             $items = $items->merge( $more );
         }
         return $items;
