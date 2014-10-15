@@ -66,4 +66,12 @@ class BasicModel extends \Eloquent {
         return $this->$attribute;
     }
 
+    public static function collectionToIdArray( $collection ){
+        $idArray = [];
+        foreach( $collection as $one ){
+            $idArray[] = $one->getKey();
+        }
+        return $idArray;
+    }
+
 } 

@@ -67,24 +67,54 @@ class MtoNRelationShip extends BasicModel{
         return static::where( $attributes )->first();
     }
 
-    public static function getM( BasicModel $item_n ){
+    public static function queryM( BasicModel $item_n ){
         $attributes = array(
             static::$nameN . '_type' => $item_n->getMorphClass() ,
             static::$nameN . '_id'   => $item_n->getKey() ,
         );
-        return static::where( $attributes )->get();
+        return static::where( $attributes );
+    }
+
+    public static function getM( BasicModel $item_n , $idArray = false ){
+        if( ! $idArray ){
+            return static::queryM( $item_n )->get();
+        }
+        else{
+            $idArray = [];
+            $collection = static::queryM( $item_n )->get();
+            $idName = static::$nameM . '_id';
+            foreach( $collection as $one ){
+                $idArray[] = $one->{$idName};
+            }
+            return $idArray;
+        }
     }
 
     public function itemM(){
         return $this->morphTo( static::$nameM );
     }
 
-    public static function getN( BasicModel $item_m ){
+    public static function queryN( BasicModel $item_m ){
         $attributes = array(
             static::$nameM . '_type' => $item_m->getMorphClass() ,
             static::$nameM . '_id'   => $item_m->getKey() ,
         );
-        return static::where( $attributes )->get();
+        return static::where( $attributes );
+    }
+
+    public static function getN( BasicModel $item_m , $idArray = false ){
+        if( ! $idArray ){
+            return static::queryN( $item_m )->get();
+        }
+        else{
+            $idArray = [];
+            $collection = static::queryN( $item_m )->get();
+            $idName = static::$nameN . '_id';
+            foreach( $collection as $one ){
+                $idArray[] = $one->{$idName};
+            }
+            return $idArray;
+        }
     }
 
     public function itemN(){
