@@ -75,12 +75,20 @@ class MtoNRelationShip extends BasicModel{
         return static::where( $attributes )->get();
     }
 
+    public function itemM(){
+        return $this->morphTo( static::$nameM );
+    }
+
     public static function getN( BasicModel $item_m ){
         $attributes = array(
             static::$nameM . '_type' => $item_m->getMorphClass() ,
             static::$nameM . '_id'   => $item_m->getKey() ,
         );
         return static::where( $attributes )->get();
+    }
+
+    public function itemN(){
+        return $this->morphTo( static::$nameN );
     }
 
     public static function setM( BasicModel $item_n , $items ){
