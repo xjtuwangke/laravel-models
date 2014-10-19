@@ -27,7 +27,11 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = array( 'password', 'remember_token' );
+
+    public $profiles = array( 'avatar' );
+
+    protected $_profile = array();
 
     //protected $fillable = array('username' , 'mobile' , 'email');
 
@@ -77,6 +81,51 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
         $this->password = \Hash::make( $password );
         $this->save();
         return $this;
+    }
+
+    public function __get( $attribute ){
+        if( 'profile' == $attribute ){
+            return parent::__get( 'profile' );
+        }
+        if( $this->profile && in_array( $attribute , $this->profiles ) ){
+            return $this->profile->{$attribute};
+        }
+        else{
+            return parent::__get( $attribute );
+        }
+    }
+
+    public function __set( $key , $value ){
+        if( in_array( $key , $this->profiles ) ){
+            if( $this->profile ){
+                $this->profile->{$key} = $value;
+            }
+            else{
+                $this->_profile[ $key ] = $value;
+            }
+        }
+        else{
+            parent::__set( $key , $value );
+        }
+    }
+
+    public function save(array $options = array()){
+        $user = parent::save( $options );
+        if( ! empty( $this->_profile ) ){
+            if( ! $this->profile ){
+                $profiles = $this->_profile;
+                $profiles[ 'user_id' ] = $this->getKey();
+                \ProfileModel::create( $profiles );
+            }
+            else{
+                foreach( $this->_profile as $key => $val ){
+                    $this->profile->{$key} = $val;
+                }
+                $this->profile->save();
+            }
+            $this->_profile = array();
+        }
+        return $user;
     }
 
 }
