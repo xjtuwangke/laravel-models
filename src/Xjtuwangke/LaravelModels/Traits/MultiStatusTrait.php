@@ -23,6 +23,7 @@ trait MultiStatusTrait {
                 }
             }
         }
+        $table->index( [ 'status' ] );
         return $table;
     }
 

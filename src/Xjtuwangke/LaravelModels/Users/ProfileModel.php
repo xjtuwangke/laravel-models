@@ -14,8 +14,9 @@ class ProfileModel extends BasicModel {
     protected $table = 'user_profile';
 
     static public function _schema_profilemodel( \Illuminate\Database\Schema\Blueprint $table ){
-        $table->integer( 'user_id' )->unsigned();
+        $table->unsignedInteger( 'user_id' );
         $table->text( 'avatar' );
+        $table->index( ['user_id'] );
         return $table;
     }
 

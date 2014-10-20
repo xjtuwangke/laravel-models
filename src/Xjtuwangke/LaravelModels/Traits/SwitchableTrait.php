@@ -12,6 +12,7 @@ trait SwitchableTrait {
 
     static public function _schema_switchableTable( \Illuminate\Database\Schema\Blueprint $table ){
         $table->enum( 'switch' , [ '启用' , '禁用' ] );
+        $table->index( [ 'switch' ] );
         return $table;
     }
 

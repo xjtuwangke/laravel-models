@@ -70,7 +70,6 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
         if( is_null( $mobile ) && is_null( $email ) ){
             return false;
         }
-
         $user = static::create( ['username' => $name , 'nickname' => $nick , 'mobile' => $mobile , 'email' => $email , 'password' => $password ] );
         $profile = ProfileModel::create( [ 'user_id' => $user->id ] );
         $profile->save();
@@ -84,14 +83,12 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
     }
 
     public function __get( $attribute ){
-        if( 'profile' == $attribute ){
-            return parent::__get( 'profile' );
-        }
-        if( $this->profile && in_array( $attribute , $this->profiles ) ){
+        $parent = parent::__get( $attribute );
+        if( ! $parent && $this->profile && in_array( $attribute , $this->profiles ) ){
             return $this->profile->{$attribute};
         }
         else{
-            return parent::__get( $attribute );
+            return $parent;
         }
     }
 
