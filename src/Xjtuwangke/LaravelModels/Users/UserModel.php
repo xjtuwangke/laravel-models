@@ -50,6 +50,18 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
         return $table;
     }
 
+    public static function create( array $attrubutes ){
+        $user = new static();
+        if( ! array_key_exists( 'nickname' , $attrubutes ) ){
+            $user->nickname = static::generateNickname();
+        }
+        foreach( $attrubutes as $key => $val ){
+            $user->{$key} = $val;
+        }
+        $user->save();
+        return $user;
+    }
+
     public function scopeOfGroup( $query , $group ){
         return $query->where( 'user.group' , $group );
     }
@@ -62,29 +74,19 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
         return 'user_' . time() . sprintf( '%08d' , rand( 0 , 99999999 ) );
     }
 
-    static function createUser( $name , $password , $mobile = null , $email = null  , $nick = null ){
-        if( ! $nick ){
-            $nick = static::generateNickname();
-        }
-        $password = \Hash::make( $password );
-        if( is_null( $mobile ) && is_null( $email ) ){
-            return false;
-        }
-        $user = static::create( ['username' => $name , 'nickname' => $nick , 'mobile' => $mobile , 'email' => $email , 'password' => $password ] );
-        $profile = ProfileModel::create( [ 'user_id' => $user->id ] );
-        $profile->save();
-        return $user;
-    }
-
-    public function changePassword( $password ){
-        $this->password = \Hash::make( $password );
-        $this->save();
-        return $this;
+    public function setPasswordAttribute( $value ){
+        $this->attributes['password'] = \Hash::make( $value );
     }
 
     public function __get( $attribute ){
+        if( 'profile' == $attribute ){
+            return parent::__get( $attribute );
+        }
         $parent = parent::__get( $attribute );
-        if( ! $parent && $this->profile && in_array( $attribute , $this->profiles ) ){
+        if( ! $parent
+            && $this->profile
+            && in_array( $attribute , $this->profiles )
+        ){
             return $this->profile->{$attribute};
         }
         else{
