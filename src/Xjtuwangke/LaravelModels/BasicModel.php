@@ -74,12 +74,12 @@ class BasicModel extends \Eloquent {
         return $idArray;
     }
 
-    public static function is_unique( $attribute , $value , $withTrashed = true ){
+    public static function countExists( $attribute , $value , $withTrashed = true ){
         if( $withTrashed ){
-            return static::withTrashed()->where( $attribute , $value )->exists();
+            return static::withTrashed()->where( $attribute , $value )->count();
         }
         else{
-            return static::where( $attribute , $value )->exists();
+            return static::where( $attribute , $value )->count();
         }
     }
 
