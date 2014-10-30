@@ -59,11 +59,7 @@ class UserModel extends BasicModel implements UserInterface, RemindableInterface
             $user->{$key} = $val;
         }
         $user->save();
-        if( ! $user->profile ){
-            \ProfileModel::create(array(
-                'user_id' => $user->getKey(),
-            ));
-        }
+        \ProfileModel::firstOrCreate( [ 'user_id' => $user->getKey() ] );
         return $user;
     }
 

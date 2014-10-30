@@ -83,4 +83,24 @@ class BasicModel extends \Eloquent {
         }
     }
 
+    public function queryTargetsByLinkModel( $targetClass , $linkClass , $foreignKeyOfThis , $foreignKeyOfTarget ){
+        $link = new $linkClass;
+        $target = new $targetClass;
+        return $targetClass::select( [ "{$target->getTable()}.*" , "{$link->getTable()}.{$foreignKeyOfThis}" , "{$link->getTable()}.{$foreignKeyOfTarget}" ]  )
+            ->join( $link->getTable() , function( $join ) use( $link , $target , $foreignKeyOfThis , $foreignKeyOfTarget ){
+            $join->on( "{$target->getTable()}.{$target->getKeyName()}" , '=' , "{$link->getTable()}.{$foreignKeyOfTarget}" )
+                ->where( "{$link->getTable()}.{$foreignKeyOfThis}" , '=' , $this->getKey() );
+        });
+    }
+
+    public function queryLinksByTargetModel( $linkClass , $targetClass ,$foreignKeyOfThis , $foreignKeyOfTarget ){
+        $link = new $linkClass;
+        $target = new $targetClass;
+        return $linkClass::select( [ "{$link->getTable()}.*" ]  )
+            ->join( $target->getTable() , function( $join ) use( $link , $target , $foreignKeyOfThis , $foreignKeyOfTarget ){
+                $join->on( "{$target->getTable()}.{$target->getKeyName()}" , '=' , "{$link->getTable()}.{$foreignKeyOfTarget}" )
+                    ->where( "{$link->getTable()}.{$foreignKeyOfThis}" , '=' , $this->getKey() );
+            });
+    }
+
 } 
