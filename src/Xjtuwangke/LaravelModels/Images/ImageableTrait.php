@@ -31,7 +31,7 @@ trait ImageableTrait {
             return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' )->where( 'type' , 'default' );
         }
         else{
-            return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' )->where( 'type' , 'default' )->first();
+            return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' )->where( 'type' , $type )->first();
         }
     }
 
