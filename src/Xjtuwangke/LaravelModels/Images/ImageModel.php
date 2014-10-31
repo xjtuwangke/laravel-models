@@ -18,6 +18,10 @@ class ImageModel extends BasicModel {
         //User::ofGroup('admin')->get()
     }
 
+    public function scopeOfType( $query , $type ){
+        return $query->where( 'images.type' , $type );
+    }
+
     public function imageable(){
         return $this->morphTo();
     }
@@ -44,15 +48,17 @@ class ImageModel extends BasicModel {
     }
 
     /**
-     * @param $linked
-     * @param $url
-     * @param $order
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param        $linked
+     * @param        $url
+     * @param        $order
+     * @param string $type
+     * @return \___PHPSTORM_HELPERS\static|\Illuminate\Database\Eloquent\Model|mixed|null|static
      */
-    public static function linkUploadedImage( $linked , $url , $order ){
+    public static function linkUploadedImage( $linked , $url , $order , $type = 'default'){
         $images = static::where( 'imageable_id' , $linked->id )
             ->where( 'imageable_type' , get_class( $linked ) )
-            ->where( 'image_order' , $order )->get();
+            ->where( 'image_order' , $order )
+            ->where( 'type' , $type )->get();
         foreach( $images as $image ){
             $image->delete();
         }
@@ -61,6 +67,7 @@ class ImageModel extends BasicModel {
             $image->imageable_id = $linked->id;
             $image->imageable_type = get_class( $linked );
             $image->image_order = $order;
+            $image->type = $type;
             $image->save();
             $image->restore();
         }
@@ -68,11 +75,13 @@ class ImageModel extends BasicModel {
     }
 
     /**
-     * @param $linked
+     * @param        $linked
+     * @param string $type
      */
-    public static function unlinkAllImages( $linked ){
+    public static function unlinkAllImages( $linked , $type = 'default' ){
         $images = static::where( 'imageable_id' , $linked->id )
             ->where( 'imageable_type' , get_class( $linked ) )
+            ->where( 'type' , $type )
             ->where( 'image_order' , '!=' , 0 )->get();
         foreach( $images as $image ){
             $image->delete();

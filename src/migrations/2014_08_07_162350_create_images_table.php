@@ -28,6 +28,7 @@ class CreateImagesTable extends Migration {
             $table->char( 'height' , 100 );
             $table->text( 'url' );
             $table->morphs( 'imageable' );
+            $table->string( 'type' )->default( 'default' );
             $table->integer( 'image_order' )->default( 0 );
             $table->softDeletes();
             $table->timestamps();

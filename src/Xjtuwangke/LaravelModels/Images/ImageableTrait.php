@@ -13,26 +13,36 @@ use Xjtuwangke\LaravelCms\Elements\Form\FormField\FormFieldBase;
 
 trait ImageableTrait {
 
-    public $modifiedImage = null;
+    public $modifiedImage = array();
 
     public static function _onBoot_imageableTrait(){
         static::saved( function( $item ){
-            if( null !== $item->modifiedImage ){
-                $url = $item->modifiedImage;
-                ImageModel::linkUploadedImage( $item , $url , 0 );
-                $item->modifiedImage = null;
+            var_dump( $item->modifiedImage );
+            foreach( $item->modifiedImage as $type => $url ){
+                ImageModel::linkUploadedImage( $item , $url , 0 , $type );
             }
+            $item->modifiedImage = array();
             return $item;
         });
     }
 
-    public function image(){
-        return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' );
+    public function image( $type = null ){
+        if( is_null( $type ) ){
+            return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' )->where( 'type' , 'default' );
+        }
+        else{
+            return $this->morphOne( 'Xjtuwangke\LaravelModels\Images\ImageModel' , 'imageable' )->where( 'image_order' , '0' )->where( 'type' , 'default' )->first();
+        }
     }
 
-    public static function bindFormActionImageUpload( $form , $item = null , $id = 0){
+    public static function bindFormActionImageUpload( $form , $item = null , $id = 0 , $type = 'default'){
 
-        $label = '封面图';
+        if( 'default' === 'type' ){
+            $label = '封面图';
+        }
+        else{
+            $label = $type;
+        }
 
         $width = null;
         $height = null;
@@ -53,13 +63,12 @@ trait ImageableTrait {
             ->setHeight( $height )
         );
 
-        $form->setSaveFunc( 'image' , function( $item , $form , $field ){
+        $form->setSaveFunc( 'image' , function( $item , $form , $field )use( $type ){
             $url = $field->value();
-            $item->modifiedImage = $url;
+            $item->modifiedImage[ $type ] =  $url;
             return $item;
         });
         if( $id ){
-            $image = $item->getImage();
             $form->setDefault( 'image' , $item->getImage() );
         }
         return $form;
@@ -68,7 +77,6 @@ trait ImageableTrait {
     public function getImage(){
         $image = $this->image;
         if( $image ){
-            $url = $image->url;
             return $image->url;
         }
         else{
