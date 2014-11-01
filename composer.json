@@ -10,7 +10,7 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*"
-        , "xjtuwangke/laravel-seeder": "2.3.*@dev"
+        , "xjtuwangke/laravel-seeder": "dev-master"
         , "zendframework/zend-permissions-rbac": "2.3.*@dev"
     },
     "autoload": {
