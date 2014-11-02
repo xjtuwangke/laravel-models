@@ -17,7 +17,6 @@ trait ImageableTrait {
 
     public static function _onBoot_imageableTrait(){
         static::saved( function( $item ){
-            var_dump( $item->modifiedImage );
             foreach( $item->modifiedImage as $type => $url ){
                 ImageModel::linkUploadedImage( $item , $url , 0 , $type );
             }
