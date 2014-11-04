@@ -25,6 +25,22 @@ trait VisitableTrait {
         });
     }
 
+    public function getVisitsAttribute( $value ){
+        $value = ( int ) $value;
+        if( $value < 0 ){
+            $value = 0;
+        }
+        return $value;
+    }
+
+    public function getVisitsRealAttribute( $value ){
+        $value = ( int ) $value;
+        if( $value < 0 ){
+            $value = 0;
+        }
+        return $value;
+    }
+
     public function addVisit( BasicModel $user ){
         if( VisitModel::hasRelationShip( $user , $this ) ){
             return $this;

@@ -25,6 +25,22 @@ trait FavoriteTrait {
         });
     }
 
+    public function getFavoritesAttribute( $value ){
+        $value = ( int ) $value;
+        if( $value < 0 ){
+            $value = 0;
+        }
+        return $value;
+    }
+
+    public function getFavoritesRealAttribute( $value ){
+        $value = ( int ) $value;
+        if( $value < 0 ){
+            $value = 0;
+        }
+        return $value;
+    }
+
     public function isFavoritedByUser( $user ){
         if( ! $user ){
             return false;
