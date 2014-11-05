@@ -30,7 +30,7 @@ trait FavoriteTrait {
         if( $value < 0 ){
             $value = 0;
         }
-        return $value;
+        return (string) $value;
     }
 
     public function getFavoritesRealAttribute( $value ){
@@ -38,7 +38,7 @@ trait FavoriteTrait {
         if( $value < 0 ){
             $value = 0;
         }
-        return $value;
+        return (string) $value;
     }
 
     public function isFavoritedByUser( $user ){

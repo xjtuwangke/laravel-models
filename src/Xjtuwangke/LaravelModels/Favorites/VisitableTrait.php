@@ -30,7 +30,7 @@ trait VisitableTrait {
         if( $value < 0 ){
             $value = 0;
         }
-        return $value;
+        return (string) $value;
     }
 
     public function getVisitsRealAttribute( $value ){
@@ -38,7 +38,7 @@ trait VisitableTrait {
         if( $value < 0 ){
             $value = 0;
         }
-        return $value;
+        return (string) $value;
     }
 
     public function addVisit( BasicModel $user ){
