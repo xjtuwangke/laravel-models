@@ -21,7 +21,7 @@ trait LikeTrait {
 
     static protected function _onBoot_favoriteTrait(){
         static::creating( function( $item ){
-            $item->likes = rand( 3 , 12 );
+            $item->likes = rand( 0 , 2 );
         });
     }
 
