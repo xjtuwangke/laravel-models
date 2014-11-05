@@ -9,6 +9,8 @@
 namespace Xjtuwangke\LaravelModels\Favorites;
 
 
+use Xjtuwangke\LaravelModels\BasicModel;
+
 trait LikeTrait {
 
     static public function _schema_likeTrait( \Illuminate\Database\Schema\Blueprint $table ){
