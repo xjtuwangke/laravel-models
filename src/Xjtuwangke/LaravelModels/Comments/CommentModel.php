@@ -38,7 +38,7 @@ class CommentModel extends BasicModel{
         }
     }
 
-    public function comment_root(){
+    public function commentRoot(){
         return $this->morphTo();
     }
 
@@ -54,9 +54,9 @@ class CommentModel extends BasicModel{
             $comment['commentable_type'] = $commentable->getMorphClass();
             $comment['commentable_id']   = $commentable->getKey();
             $comment = static::create( $comment );
-            if( $commentable->comment_root ){
+            if( $commentable->commentRoot ){
                 //commentable有comment_root时继承comment_root
-                $root = $commentable->comment_root;
+                $root = $commentable->commentRoot;
             }
             else{
                 //否则root是commentable
