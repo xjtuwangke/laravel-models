@@ -41,29 +41,52 @@ trait VisitableTrait {
         return (string) $value;
     }
 
-    public function addVisit( BasicModel $user ){
-        if( VisitModel::hasRelationShip( $user , $this ) ){
-            return $this;
-        };
-        VisitModel::add( $user , $this );
+    public function setVisitsAttribute( $value ){
+        $value = (int) $value;
+        if( $value < 0 ){
+            $value = 0;
+        }
+        $this->attributes[ 'visits' ] = $value;
+    }
+
+    public function setVisitsRealAttribute( $value ){
+        $value = (int) $value;
+        if( $value < 0 ){
+            $value = 0;
+        }
+        $this->attributes[ 'visits_real' ] = $value;
+    }
+
+    public function addVisit( BasicModel $user = null ){
+        if( ! is_null( $user ) ){
+            if( VisitModel::hasRelationShip( $user , $this ) ){
+                return $this;
+            }
+            else{
+                VisitModel::add( $user , $this );
+            }
+        }
         $this->visits+= 1;
         $this->visits_real+= 1;
         $this->save();
         return $this;
     }
 
-    public function minusVisit( BasicModel $user ){
-        if( VisitModel::hasRelationShip( $user , $this ) ){
-            VisitModel::remove( $user , $this );
-            if( $this->visits > 0 ){
+    public function minusVisit( BasicModel $user = null ){
+        if( ! is_null( $user ) ){
+            if( VisitModel::hasRelationShip( $user , $this ) ){
+                VisitModel::remove( $user , $this );
                 $this->visits-= 1;
-            }
-            if( $this->visits_real > 0 ){
                 $this->visits_real-= 1;
+                $this->save();
             }
-            $this->save();
             return $this;
-        };
+        }
+        else{
+            $this->visits-= 1;
+            $this->visits_real-= 1;
+            $this->save();
+        }
         return $this;
     }
 
