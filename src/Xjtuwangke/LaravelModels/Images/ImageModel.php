@@ -13,6 +13,10 @@ class ImageModel extends BasicModel {
      */
     protected $table = 'images';
 
+    public $cache_enable = true;
+
+    public $cache_minutes = -1;
+
     public function scopeOfGroup( $query , $group ){
         return $query->where( 'images.imageable_type' , $group );
         //User::ofGroup('admin')->get()
