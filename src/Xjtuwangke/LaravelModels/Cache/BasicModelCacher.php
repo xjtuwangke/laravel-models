@@ -14,7 +14,7 @@ use Xjtuwangke\LaravelModels\BasicModel;
 class BasicModelCacher {
 
     public static function cacheTags( BasicModel $model ){
-        $tags = array( 'QueryCache' , $model->getTableName() );
+        $tags = array( 'QueryCache-table-' . $model->getTableName() );
         if( $model->cache_tags ){
             $tags = array_merge( $tags , $model->cache_tags );
         }
