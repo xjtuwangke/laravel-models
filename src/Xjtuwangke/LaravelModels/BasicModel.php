@@ -9,6 +9,7 @@
 namespace Xjtuwangke\LaravelModels;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Xjtuwangke\LaravelModels\Cache\BasicModelCacheTrait;
 use Xjtuwangke\LaravelModels\Observer\HistoryResourceTrait;
 
 use Xjtuwangke\LaravelModels\Observer\ModelObserver;
@@ -16,6 +17,8 @@ use Xjtuwangke\LaravelModels\Observer\ModelObserver;
 class BasicModel extends \Eloquent {
 
     use SoftDeletingTrait , HistoryResourceTrait;
+
+    use BasicModelCacheTrait;
 
     protected $dates = ['deleted_at'];
 
@@ -101,6 +104,13 @@ class BasicModel extends \Eloquent {
                 $join->on( "{$target->getTable()}.{$target->getKeyName()}" , '=' , "{$link->getTable()}.{$foreignKeyOfTarget}" )
                     ->where( "{$link->getTable()}.{$foreignKeyOfThis}" , '=' , $this->getKey() );
             });
+    }
+
+    public function saveWithOutTimestamps(){
+        $timestamps = $this->timestamps;
+        $this->timestamps = false;
+        $this->save();
+        $this->timestamps = $timestamps;
     }
 
 } 
