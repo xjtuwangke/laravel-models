@@ -150,28 +150,28 @@ class MtoNRelationShip extends BasicModel{
     public static function queryRelatedItemM( BasicModel $item_n , BasicModel $item_m ){
         $mTableName = $item_m->getTable();
         $lTableName = static::getTableName();
-        $item_m->cacheTags( [ 'QueryCache-table-' . $lTableName ] );
+        $item_m->cache_tags = [ 'QueryCache-table-' . $lTableName ];
         return $item_m->select( $mTableName . '.*' )->join( $lTableName , function( $join )use( $item_n , $item_m , $mTableName , $lTableName ){
             $m = static::$nameM;
             $n = static::$nameN;
             $join->on( "{$lTableName}.{$m}_id" , "=" , "{$mTableName}." . $item_m->getKeyName() )
+                ->where( "{$lTableName}.{$n}_id" , "=" , $item_n->getKey() )
                 ->where( "{$lTableName}.{$m}_type" , "=" , $item_m->getMorphClass() )
-                ->where( "{$lTableName}.{$n}_type" , "=" , $item_n->getMorphClass() )
-                ->where( "{$lTableName}.{$n}_id" , "=" , $item_n->getKey() );
+                ->where( "{$lTableName}.{$n}_type" , "=" , $item_n->getMorphClass() );
         });
     }
 
     public static function queryRelatedItemN( BasicModel $item_m , BasicModel $item_n ){
         $nTableName = $item_n->getTable();
         $lTableName = static::getTableName();
-        $item_m->cacheTags( [ 'QueryCache-table-' . $lTableName ] );
+        $item_m->cache_tags = [ 'QueryCache-table-' . $lTableName ];
         return $item_n->select( $nTableName . '.*' )->join( $lTableName , function( $join )use( $item_n , $item_m , $nTableName , $lTableName ){
             $m = static::$nameM;
             $n = static::$nameN;
             $join->on( "{$lTableName}.{$n}_id" , "=" , "{$nTableName}." . $item_n->getKeyName() )
+                ->where( "{$lTableName}.{$m}_id" , "=" , $item_m->getKey() )
                 ->where( "{$lTableName}.{$n}_type" , "=" , $item_n->getMorphClass() )
-                ->where( "{$lTableName}.{$m}_type" , "=" , $item_m->getMorphClass() )
-                ->where( "{$lTableName}.{$m}_id" , "=" , $item_m->getKey() );
+                ->where( "{$lTableName}.{$m}_type" , "=" , $item_m->getMorphClass() );
         });
     }
 
